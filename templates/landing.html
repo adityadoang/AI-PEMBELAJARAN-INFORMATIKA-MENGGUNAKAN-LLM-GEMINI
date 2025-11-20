@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic AI Assistant - Smart Learning Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --accent: #0ea5e9;
+            --success: #10b981;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border: #e2e8f0;
+            --shadow: rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            padding: 0.5rem 1.1rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 18px var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px var(--shadow);
+            opacity: 0.95;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 5rem 2rem 3rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem 5rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+        }
+
+        .card-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .card-badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Pilihan Cards */
+        .pilihan-card .card-icon {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+        }
+
+        .pilihan-card .card-badge {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 4rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .feature h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .feature p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .features {
+                padding: 2rem 1.5rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">🎓</div>
+                <span>Academic AI</span>
+            </a>
+            <div class="nav-links">
+                <a href="#tentang" class="nav-link">Tentang</a>
+                <!-- Button Mulai setelah Tentang -->
+                <a href="#fitur" class="nav-link">Fitur</a>
+                <a href="#kontak" class="nav-link">Kontak</a>
+                <a href="/chatbot" class="nav-cta">Mulai Belajar</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (aku kasih id 'tentang' biar link nav bekerja) -->
+    <section class="hero" id="tentang">
+        <h1>Asisten Belajar Pintar<br>Berbasis AI</h1>
+        <p>Platform pembelajaran interaktif yang didukung teknologi AI untuk membantu Anda memahami materi kuliah dengan lebih mudah dan efektif.</p>
+        
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-number">6</span>
+                <span class="stat-label">Semester</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Akses Kapan Saja</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">∞</span>
+                <span class="stat-label">Pertanyaan</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Mata Kuliah Wajib -->
+        <section class="section" id="wajib">
+            <div class="section-header">
+                <div class="section-icon">📚</div>
+                <div>
+                    <h2 class="section-title">Mata Kuliah Wajib</h2>
+                    <p class="section-subtitle">Pilih semester untuk memulai pembelajaran</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <a href="/chatbot?kategori=wajib_1" class="card">
+                    <div class="card-header">
+                        <div class="card-icon">1️⃣</div>
+                        <div class="card-content">
+                            <h3>Semester 1</h3>
+                            <p>Mata kuliah dasar dan pengenalan konsep fundamental</p>
+                        </div>
+                    </div>
+                    <span class="card-badge">Semester Wajib</span>
+                </a>
+
+                <a href="/chatbot?kategori=wajib_2" class="card">
+                    <div class="card-header">
+                        <div class="card-icon">2️⃣</div>
+                        <div class="card-content">
+                            <h3>Semester 2</h3>
+                            <p>Pengembangan pemahaman dan skill praktis</p>
+                        </div>
+                    </div>
+                    <span class="card-badge">Semester Wajib</span>
+                </a>
+
+                <a href="/chatbot?kategori=wajib_3" class="card">
+                    <div class="card-header">
+                        <div class="card-icon">3️⃣</div>
+                        <div class="card-content">
+                            <h3>Semester 3</h3>
+                            <p>Pendalaman materi dan aplikasi teori</p>
+                        </div>
+                    </div>
+                    <span class="card-badge">Semester Wajib</span>
+                </a>
+
+                <a href="/chatbot?kategori=wajib_4" class="card">
+                    <div class="card-header">
+                        <div class="card-icon">4️⃣</div>
+                        <div class="card-content">
+                            <h3>Semester 4</h3>
+                            <p>Materi intermediate dan studi kasus</p>
+                        </div>
+                    </div>
+                    <span class="card-badge">Semester Wajib</span>
+                </a>
+
+                <a href="/chatbot?kategori=wajib_5" class="card">
+                    <div class="card-header">
+                        <div class="card-icon">5️⃣</div>
+                        <div class="card-content">
+                            <h3>Semester 5</h3>
+                            <p>Konsep advanced dan penelitian terapan</p>
+                        </div>
+                    </div>
+                    <span class="card-badge">Semester Wajib</span>
+                </a>
+
+                <a href="/chatbot?kategori=wajib_6" class="card">
+                    <div class="card-header">
+                        <div class="card-icon">6️⃣</div>
+                        <div class="card-content">
+                            <h3>Semester 6</h3>
+                            <p>Spesialisasi dan persiapan karir profesional</p>
+                        </div>
+                    </div>
+                    <span class="card-badge">Semester Wajib</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Mata Kuliah Pilihan -->
+        <section class="section" id="pilihan">
+            <div class="section-header">
+                <div class="section-icon">⭐</div>
+                <div>
+                    <h2 class="section-title">Mata Kuliah Pilihan</h2>
+                    <p class="section-subtitle">Sesuaikan pembelajaran dengan minat Anda</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <a href="/chatbot?kategori=pilihan_ganjil" class="card pilihan-card">
+                    <div class="card-header">
+                        <div class="card-icon">🌟</div>
+                        <div class="card-content">
+                            <h3>Mata Kuliah Pilihan Ganjil</h3>
+                            <p>Materi pilihan untuk semester ganjil sesuai peminatan</p>
+                        </div>
+                    </div>
+                    <span class="card-badge">Pilihan Ganjil</span>
+                </a>
+
+                <a href="/chatbot?kategori=pilihan_genap" class="card pilihan-card">
+                    <div class="card-header">
+                        <div class="card-icon">✨</div>
+                        <div class="card-content">
+                            <h3>Mata Kuliah Pilihan Genap</h3>
+                            <p>Materi pilihan untuk semester genap sesuai peminatan</p>
+                        </div>
+                    </div>
+                    <span class="card-badge">Pilihan Genap</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="features" id="fitur">
+            <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">Mengapa Menggunakan Academic AI?</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Platform pembelajaran yang dirancang untuk kesuksesan akademik Anda</p>
+            
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🤖</div>
+                    <h4>AI Powered</h4>
+                    <p>Didukung Gemini AI untuk jawaban akurat dan kontekstual</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Respon Cepat</h4>
+                    <p>Dapatkan jawaban dalam hitungan detik, kapan saja Anda butuhkan</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📖</div>
+                    <h4>Konteks Spesifik</h4>
+                    <p>Jawaban disesuaikan dengan materi semester yang Anda pilih</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💬</div>
+                    <h4>Interaktif</h4>
+                    <p>Tanya follow-up dan diskusi mendalam tentang topik apapun</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="kontak">
+        <div class="footer-content">
+            <div class="footer-logo">🎓 Academic AI Assistant</div>
+            <p class="footer-text">© 2024 Academic AI Assistant. Powered by Gemini AI &amp; RAG Technology</p>
+            <p class="footer-text" style="margin-top: 0.5rem;">Membantu mahasiswa belajar lebih efektif dan efisien</p>
+        </div>
+    </footer>
+</body>
+</html>
