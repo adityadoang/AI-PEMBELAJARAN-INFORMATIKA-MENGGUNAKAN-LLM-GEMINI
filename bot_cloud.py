@@ -13,12 +13,19 @@ from flask_cors import CORS
 # =========================
 
 # TODO: sebaiknya pakai environment variable, jangan hardcode API key di production
-GEMINI_API_KEY = "GEMINI_API_KEY)"
-GEMINI_MODEL = "GEMINI_MODEL"
+GEMINI_API_KEY = "AIzaSyBtgId7ww6_3k7cGvWntkymLUFriI5lUZA"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 # Konfigurasi database
 db = mysql.connector.connect(
-    #gunakan konfigurasi dari tidb
+    host="gateway01.ap-southeast-1.prod.aws.tidbcloud.com",
+    port=4000,
+    user="2j5p3FAFY9SMKvS.root",
+    password="thbpnJzHhVwYy0bj",
+    database="RAG",
+    ssl_ca=r"D:\kuliah\AI-PEMBELAJARAN-INFORMATIKA-MENGGUNAKAN-LLM-GEMINI\isrgrootx1.pem",
+    ssl_verify_cert=True,
+    ssl_verify_identity=True
 )
 
 # Init Gemini
@@ -186,7 +193,7 @@ def response_query(database, user_query, rag_query, chat_session, tables, select
         min_distance = min(doc["distance"] for doc in retrieved_docs)
         # threshold bisa kamu adjust sesuai kualitas embedding
         if min_distance > 0.55:
-            low_relevance = False
+            low_relevance = True   # <- ini aku perbaiki, tadinya False
 
         context = "\n\n".join(
             [f"[{doc['source']}] {doc['text']}" for doc in retrieved_docs]
@@ -224,6 +231,44 @@ berdasarkan pengetahuan umum.
 User saat ini sedang melihat materi di: {semester_label}.
 {extra_instruction}
 
+Aturan Penulisan Matematika (PENTING):
+- Semua rumus dan matriks harus ditulis dengan sintaks LaTeX.
+- JANGAN pernah menulis matriks dalam bentuk seperti:
+  A = (1 2 3 4) atau B = (5 6 7 8).
+- Kalau menulis matriks, SELALU gunakan bentuk berikut.
+
+  Contoh matriks 2×2:
+  $$
+  A = \\begin{{pmatrix}}
+  a & b \\\\
+  c & d
+  \\end{{pmatrix}}
+  $$
+
+  Contoh matriks 3×3:
+  $$
+  A = \\begin{{pmatrix}}
+  a & b & c \\\\
+  d & e & f \\\\
+  g & h & i
+  \\end{{pmatrix}}
+  $$
+
+  Jika menulis dua matriks sekaligus, gunakan koma dan \\quad:
+  $$
+  A = \\begin{{pmatrix}}
+  a & b \\\\
+  c & d
+  \\end{{pmatrix}},\\quad
+  B = \\begin{{pmatrix}}
+  e & f \\\\
+  g & h
+  \\end{{pmatrix}}
+  $$
+
+- Gunakan $ ... $ untuk rumus di dalam kalimat, dan $$ ... $$ untuk rumus yang berdiri sendiri.
+- Jika sebelumnya kamu menulis matriks dalam bentuk teks biasa, perbaiki dan ulangi dalam bentuk LaTeX.
+
 === KONTEN TERKAIT (RAG) ===
 {context_section}
 
@@ -235,8 +280,14 @@ Jika user meminta penjelasan lebih detail, jelaskan konsep yang sama dengan lebi
 dan boleh menambahkan contoh sederhana.
 """
 
+    # opsional: debug, lihat apa yang dikirim ke Gemini
+    # print("PROMPT KE GEMINI:\n", prompt)
+
     response = chat_session.send_message(prompt)
+    # opsional: lihat raw text yang keluar
+    # print("RAW JAWABAN GEMINI:\n", response.text)
     return response.text
+
 
 
 # Bikin chat session global biar history nyambung
