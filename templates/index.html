@@ -192,9 +192,11 @@
         /* ======= APP / CHAT PAGE ======= */
         #app {
             flex: 1;
-            display: none; /* akan diubah ke flex ketika mulai chat */
+            display: none;
             flex-direction: column;
             z-index: 2;
+            position: relative;
+            height: 100vh;
         }
 
         header {
@@ -253,6 +255,7 @@
             flex-direction: column;
             gap: 20px;
             position: relative;
+            padding-bottom: 120px;
         }
 
         .msg {
@@ -266,6 +269,7 @@
             animation: slideIn 0.3s ease-out;
             position: relative;
             background-clip: padding-box;
+            overflow: visible;
         }
 
         @keyframes slideIn {
@@ -325,7 +329,9 @@
             gap: 12px;
             box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
-            z-index: 10;
+            z-index: 20;
+            position: sticky;
+            bottom: 0;
         }
 
         #query {
@@ -382,21 +388,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
-        #app {
-    position: relative;
-    height: 100vh;
-}
-
-#input-box {
-    position: sticky;
-    bottom: 0;
-    z-index: 20;
-}
-
-#chat-container {
-    padding-bottom: 120px;
-}
-
 
         @media (max-width: 768px) {
             .landing-card {
@@ -431,6 +422,12 @@
             }
         }
     </style>
+
+    <!-- KaTeX: CSS & JS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 </head>
 
 <body>
@@ -493,7 +490,7 @@
 
         <div id="input-box">
             <input type="text" id="query" placeholder="Ketik pesan Anda di sini..." autocomplete="off">
-            <button id="send-btn" onclick="sendQuery()">Kirim</button>
+            <button id="send-btn">Kirim</button>
         </div>
     </div>
 
@@ -548,21 +545,17 @@
         startBtn.addEventListener("click", () => {
             if (!selectedKategori) return;
 
-            // set info label di halaman chat
             infoLabel.textContent = "Kategori: " + (labelMap[selectedKategori] || selectedKategori);
 
-            // tampilkan halaman chat, sembunyikan landing
             landing.style.display = "none";
             appPage.style.display = "flex";
 
-            // fokus ke input chat
             setTimeout(() => {
                 queryInput.focus();
             }, 50);
         });
 
         changeBtn.addEventListener("click", () => {
-            // kembali ke landing untuk ganti semester
             appPage.style.display = "none";
             landing.style.display = "flex";
         });
@@ -575,6 +568,16 @@
                 div.textContent = text;
             } else {
                 div.innerHTML = text;
+
+                // Render LaTeX menggunakan KaTeX
+                if (window.renderMathInElement) {
+                    renderMathInElement(div, {
+                        delimiters: [
+                            {left: "$$", right: "$$", display: true},
+                            {left: "$", right: "$", display: false}
+                        ]
+                    });
+                }
             }
 
             chatBox.appendChild(div);
@@ -616,6 +619,20 @@
 
         queryInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter") sendQuery();
+        });
+
+        document.getElementById("send-btn").addEventListener("click", sendQuery);
+
+        // Optional: render math yang sudah ada di halaman saat pertama kali load
+        document.addEventListener("DOMContentLoaded", () => {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ]
+                });
+            }
         });
     </script>
 
