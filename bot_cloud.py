@@ -5,7 +5,7 @@ import google.generativeai as genai
 import markdown
 from markdown import markdown
 from sentence_transformers import SentenceTransformer
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash
 from flask_cors import CORS
 
 # =========================
@@ -13,19 +13,12 @@ from flask_cors import CORS
 # =========================
 
 # TODO: sebaiknya pakai environment variable, jangan hardcode API key di production
-GEMINI_API_KEY = "AIzaSyBtgId7ww6_3k7cGvWntkymLUFriI5lUZA"
+GEMINI_API_KEY = ""
 GEMINI_MODEL = "gemini-2.5-flash"
 
 # Konfigurasi database
 db = mysql.connector.connect(
-    host="gateway01.ap-southeast-1.prod.aws.tidbcloud.com",
-    port=4000,
-    user="2j5p3FAFY9SMKvS.root",
-    password="thbpnJzHhVwYy0bj",
-    database="RAG",
-    ssl_ca=r"D:\kuliah\AI-PEMBELAJARAN-INFORMATIKA-MENGGUNAKAN-LLM-GEMINI\isrgrootx1.pem",
-    ssl_verify_cert=True,
-    ssl_verify_identity=True
+    
 )
 
 # Init Gemini
@@ -38,11 +31,6 @@ embedder = SentenceTransformer('BAAI/bge-m3')
 # =========================
 # MAPPING SEMESTER → TABEL
 # =========================
-# Disesuaikan dengan struktur DB kamu:
-#  - smt1 .. smt6 : materi wajib per semester
-#  - pilgan       : matkul pilihan ganjil
-#  - pilgen       : matkul pilihan genap
-#  - documents    : materi umum
 SEMESTER_TABLES = {
     # matkul wajib
     "wajib_1": ["smt1", "documents"],
@@ -298,6 +286,8 @@ chat_session = model.start_chat(history=[])
 # =========================
 app = Flask(__name__)
 CORS(app)
+app.secret_key = "KAMI DARI KELOMPOK 5 MAU JADI YANG TERBAIK"
+
 
 
 # ========== ROUTE HALAMAN UI ==========
@@ -317,14 +307,98 @@ def index():
 def chatbot_alias():
     """
     Alias opsional. Kalau ada yang akses /chatbot,
-    tetap dikasih halaman yang sama dengan /
+    user harus login dulu, baru bisa ke halaman chat.
     """
+    if "user_id" not in session:
+        # Kalau belum login, arahkan ke halaman login
+        return redirect(url_for("login"))
+
     return render_template("index.html")
 
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password", "").strip()
+
+        if not email or not password:
+            flash("Email dan password wajib diisi.", "error")
+            return render_template("login.html")
+
+        cursor = db.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT id, email, username FROM users WHERE email = %s AND password = %s",
+            (email, password)
+        )
+        user = cursor.fetchone()
+        cursor.close()
+
+        if user:
+            session["user_id"] = user["id"]
+            session["user_email"] = user["email"]
+            session["username"] = user["username"]
+            flash("Berhasil login.", "success")
+            return redirect(url_for("index"))  # ke halaman landing/chatbot
+        else:
+            flash("Email atau password salah.", "error")
+            return render_template("login.html")
+
+    # GET
+    return render_template("login.html")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        email = request.form.get("email", "").strip()
+        phone = request.form.get("phone", "").strip()
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "").strip()
+
+        # Validasi sederhana
+        if not email or not phone or not username or not password:
+            flash("Semua field wajib diisi.", "error")
+            return render_template("register.html")
+
+        # Cek email sudah dipakai atau belum
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+        existing = cursor.fetchone()
+
+        if existing:
+            cursor.close()
+            flash("Email sudah terdaftar, silakan gunakan email lain atau login.", "error")
+            return render_template("register.html")
+
+        # Simpan user baru (password disimpan apa adanya, TANPA hash)
+        cursor.execute(
+            "INSERT INTO users (email, phone, username, password) VALUES (%s, %s, %s, %s)",
+            (email, phone, username, password)
+        )
+        db.commit()
+        cursor.close()
+
+        flash("Registrasi berhasil, silakan login.", "success")
+        return redirect(url_for("login"))
+
+    # GET
+    return render_template("register.html")
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash("Berhasil logout.", "success")
+    return redirect(url_for("index"))
 
 # ========== ROUTE API CHAT ==========
 @app.route("/chat", methods=["POST"])
 def chat():
+    # Cek apakah sudah login
+    if "user_id" not in session:
+        return jsonify({"error": "Silakan login terlebih dahulu."}), 401
+
     try:
         data = request.get_json()
         if not data or "query" not in data:
