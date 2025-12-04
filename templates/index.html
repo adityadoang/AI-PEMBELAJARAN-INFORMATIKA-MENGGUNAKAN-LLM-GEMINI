@@ -606,12 +606,20 @@
                     })
                 });
 
+                // kalau belum login, backend balas 401
+                if (res.status === 401) {
+                    const data401 = await res.json();
+                    addMessage(data401.error || "Silakan login terlebih dahulu sebelum mulai chat.", false);
+                    return;
+                }
+
                 const data = await res.json();
                 if (data.response) {
                     addMessage(data.response, false);
                 } else {
                     addMessage("Error: " + (data.error || "Terjadi kesalahan di server."), false);
                 }
+
             } catch (err) {
                 addMessage("Network error: " + err.message, false);
             }
