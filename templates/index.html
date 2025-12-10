@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAG Chatbot</title>
+    <title>ISC Chatbot</title>
 
     <style>
         * {
@@ -47,152 +47,9 @@
             pointer-events: none;
         }
 
-        /* ======= LANDING PAGE ======= */
-        #landing {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 2;
-        }
-
-        .landing-card {
-            background: rgba(255, 255, 255, 0.96);
-            border-radius: 24px;
-            padding: 28px 24px 24px 24px;
-            max-width: 640px;
-            width: 100%;
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-        }
-
-        .landing-header {
-            margin-bottom: 18px;
-        }
-
-        .landing-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
-        }
-
-        .landing-title h1 {
-            color: #1e3c72;
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .badge {
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #1e3c72;
-            font-weight: 600;
-        }
-
-        .landing-subtitle {
-            font-size: 13px;
-            color: #4b5563;
-        }
-
-        .landing-section-title {
-            font-size: 15px;
-            color: #1e3c72;
-            margin-top: 18px;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        .landing-desc {
-            font-size: 13px;
-            color: #4b5563;
-            margin-bottom: 10px;
-        }
-
-        .card-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .semester-card {
-            background: #ffffff;
-            border-radius: 999px;
-            padding: 6px 14px;
-            font-size: 13px;
-            cursor: pointer;
-            border: 1px solid #e5e7eb;
-            color: #374151;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .semester-card:hover {
-            border-color: #2563eb;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-            transform: translateY(-1px);
-        }
-
-        .semester-card.active {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            border-color: #1e3c72;
-            color: #1e3c72;
-            font-weight: 600;
-        }
-
-        #selected-info {
-            margin-top: 4px;
-            font-size: 12px;
-            color: #1f2937;
-        }
-
-        .landing-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 18px;
-            gap: 10px;
-        }
-
-        .landing-hint {
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        #start-btn {
-            padding: 10px 22px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #1e3c72;
-            border: none;
-            border-radius: 999px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-        }
-
-        #start-btn:hover:not(:disabled) {
-            background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.45);
-        }
-
-        #start-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        /* ======= APP / CHAT PAGE ======= */
         #app {
             flex: 1;
-            display: none;
+            display: flex;
             flex-direction: column;
             z-index: 2;
             position: relative;
@@ -201,27 +58,28 @@
 
         header {
             background: rgba(255, 255, 255, 0.95);
-            padding: 16px 24px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 3px solid #ffd700;
-            z-index: 10;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.18);
         }
 
         header h1 {
-            color: #1e3c72;
-            font-size: 22px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        header .tagline {
+            font-size: 12px;
+            color: #6b7280;
         }
 
         #info-bar {
-            background: rgba(17, 24, 39, 0.7);
-            color: #f9fafb;
+            background: rgba(6, 95, 223, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
             padding: 8px 20px;
-            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -229,178 +87,149 @@
         }
 
         #info-label {
+            font-size: 13px;
+            color: #ffffff; 
             font-weight: 500;
         }
 
-        #change-btn {
-            font-size: 12px;
+        #kategori-select {
+            padding: 6px 10px;
             border-radius: 999px;
-            padding: 6px 12px;
-            border: 1px solid rgba(249, 250, 251, 0.8);
-            background: transparent;
-            color: #e5e7eb;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        #change-btn:hover {
-            background: rgba(249, 250, 251, 0.15);
+            border: 1px solid rgba(148, 163, 184, 0.9);
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+            min-width: 220px;
         }
 
         #chat-container {
             flex: 1;
+            padding: 18px 20px;
             overflow-y: auto;
-            padding: 20px 20px 30px 20px;
+            background:
+                radial-gradient(circle at top left, rgba(255, 255, 255, 0.08) 0, transparent 55%),
+                radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.20) 0, transparent 60%);
+        }
+
+        /* ROW UNTUK SATU PESAN (bisa berisi avatar + bubble) */
+        .msg-row {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-            position: relative;
-            padding-bottom: 120px;
+            margin-bottom: 12px;
+        }
+
+        .msg-row.bot-row {
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .msg-row.user-row {
+            justify-content: flex-end;
+        }
+
+        /* AVATAR BOT */
+        .bot-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            object-fit: cover;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.75);
+            background: #0f172a;
         }
 
         .msg {
-            max-width: 65%;
-            padding: 16px 20px;
-            border-radius: 18px;
-            font-size: 15px;
-            line-height: 1.6;
+            max-width: 70%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-wrap: break-word;
             white-space: pre-wrap;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            animation: slideIn 0.3s ease-out;
-            position: relative;
-            background-clip: padding-box;
-            overflow: visible;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+            
         }
 
         .user-msg {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            color: #2c3e50;
-            align-self: flex-end;
-            border: 2px solid #e3e8ef;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #e5f0ff;
             border-bottom-right-radius: 4px;
         }
 
-        .user-msg::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: -8px;
-            width: 0;
-            height: 0;
-            border-left: 10px solid #ffffff;
-            border-bottom: 10px solid transparent;
-        }
-
         .bot-msg {
-            background: linear-gradient(135deg, #ffe657 0%, #ffd700 100%);
-            color: #1e3c72;
-            align-self: flex-start;
-            border: 2px solid #1e40af;
+            background: rgba(255, 255, 255, 0.95);
+            color: #111827;
             border-bottom-left-radius: 4px;
         }
 
-        .bot-msg::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: -8px;
-            width: 0;
-            height: 0;
-            border-right: 10px solid #2563eb;
-            border-bottom: 10px solid transparent;
-        }
-
         #input-box {
-            padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border-top: 3px solid #ffd700;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.88);
             display: flex;
-            gap: 12px;
-            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            z-index: 20;
-            position: sticky;
-            bottom: 0;
+            gap: 10px;
+            align-items: center;
+            border-top: 1px solid rgba(148, 163, 184, 0.4);
         }
 
         #query {
             flex: 1;
-            padding: 14px 18px;
-            border-radius: 25px;
-            border: 2px solid #e3e8ef;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
             outline: none;
-            background-color: #ffffff;
-            color: #2c3e50;
-            font-size: 15px;
-            transition: all 0.3s ease;
+            font-size: 14px;
+            background: rgba(15, 23, 42, 0.95);
+            color: #e5e7eb;
         }
 
-        #query:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        #query::placeholder {
+            color: #9ca3af;
         }
 
         #send-btn {
-            padding: 14px 26px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #1e3c72;
+            padding: 10px 20px;
+            border-radius: 999px;
             border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 15px;
+            background: linear-gradient(135deg, #facc15, #eab308);
+            color: #1f2937;
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 10px rgba(250, 204, 21, 0.35);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+            white-space: nowrap;
         }
 
         #send-btn:hover {
-            background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(250, 204, 21, 0.5);
         }
 
         #send-btn:active {
             transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(250, 204, 21, 0.35);
         }
 
-        ::-webkit-scrollbar {
+        /* scrollbar */
+        #chat-container::-webkit-scrollbar {
             width: 8px;
         }
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        #chat-container::-webkit-scrollbar-track {
+            background: transparent;
         }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+        #chat-container::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.7);
+            border-radius: 999px;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
-            .landing-card {
-                padding: 22px 18px 18px 18px;
-            }
-            .landing-title h1 {
-                font-size: 20px;
-            }
-            .landing-subtitle {
-                font-size: 12px;
-            }
-            .landing-desc {
-                font-size: 12px;
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
             }
 
             .msg {
@@ -412,13 +241,22 @@
             }
 
             #send-btn {
-                padding: 12px 18px;
-                font-size: 14px;
+                padding: 10px 16px;
+                font-size: 13px;
             }
 
             #query {
-                padding: 12px 14px;
-                font-size: 14px;
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            #kategori-select {
+                min-width: 180px;
+            }
+
+            .bot-avatar {
+                width: 28px;
+                height: 28px;
             }
         }
     </style>
@@ -431,83 +269,51 @@
 </head>
 
 <body>
-    <!-- LANDING PAGE -->
-    <div id="landing">
-        <div class="landing-card">
-            <div class="landing-header">
-                <div class="landing-title">
-                    <h1>ISC Chatbot</h1>
-                    <span class="badge">Mode RAG</span>
-                </div>
-                <p class="landing-subtitle">
-                    Asisten belajar yang menjawab berdasarkan materi kuliah Informatika yang sudah dimasukkan ke database.
-                </p>
-            </div>
-
-            <h2 class="landing-section-title">Pilih Semester / Mata Kuliah</h2>
-            <p class="landing-desc">
-                Pilih dulu semester atau mata kuliah pilihan yang ingin kamu pelajari.
-                Jawaban chatbot akan berfokus pada materi dari kategori yang kamu pilih.
-            </p>
-
-            <div class="card-grid">
-                <!-- Wajib -->
-                <div class="semester-card" data-kategori="wajib_1">Wajib Semester 1</div>
-                <div class="semester-card" data-kategori="wajib_2">Wajib Semester 2</div>
-                <div class="semester-card" data-kategori="wajib_3">Wajib Semester 3</div>
-                <div class="semester-card" data-kategori="wajib_4">Wajib Semester 4</div>
-                <div class="semester-card" data-kategori="wajib_5">Wajib Semester 5</div>
-                <div class="semester-card" data-kategori="wajib_6">Wajib Semester 6</div>
-
-                <!-- Pilihan -->
-                <div class="semester-card" data-kategori="pilihan_ganjil">Pilihan Ganjil</div>
-                <div class="semester-card" data-kategori="pilihan_genap">Pilihan Genap</div>
-            </div>
-
-            <div id="selected-info">Belum ada semester/mata kuliah yang dipilih.</div>
-
-            <div class="landing-footer">
-                <p class="landing-hint">
-                    Setelah memilih, klik "Mulai Chat" untuk bertanya materi sesuai kategori.
-                </p>
-                <button id="start-btn" disabled>Mulai Chat</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- APP / CHAT PAGE -->
     <div id="app">
         <header>
-            <h1>ISC Chatbot</h1>
+            <div>
+                <h1>ISC Chatbot</h1>
+                <div class="tagline">Asisten belajar berbasis RAG untuk materi Informatika</div>
+            </div>
         </header>
 
         <div id="info-bar">
-            <span id="info-label">Kategori: -</span>
-            <button id="change-btn" type="button">Ganti Semester</button>
+            <span id="info-label">Mode: General (semua semester)</span>
+            <select id="kategori-select">
+                <option value="">General (semua semester)</option>
+                <option value="wajib_1">Wajib Semester 1</option>
+                <option value="wajib_2">Wajib Semester 2</option>
+                <option value="wajib_3">Wajib Semester 3</option>
+                <option value="wajib_4">Wajib Semester 4</option>
+                <option value="wajib_5">Wajib Semester 5</option>
+                <option value="wajib_6">Wajib Semester 6</option>
+                <option value="pilihan_ganjil">Mata Kuliah Pilihan Ganjil</option>
+                <option value="pilihan_genap">Mata Kuliah Pilihan Genap</option>
+            </select>
         </div>
 
         <div id="chat-container"></div>
 
         <div id="input-box">
-            <input type="text" id="query" placeholder="Ketik pesan Anda di sini..." autocomplete="off">
+            <input
+                type="text"
+                id="query"
+                placeholder="Ketik pertanyaan Anda di sini..."
+                autocomplete="off"
+            >
             <button id="send-btn">Kirim</button>
         </div>
     </div>
 
     <script>
-        const landing = document.getElementById("landing");
         const appPage = document.getElementById("app");
-
         const chatBox = document.getElementById("chat-container");
         const queryInput = document.getElementById("query");
-
-        const selectedInfo = document.getElementById("selected-info");
-        const semesterCards = document.querySelectorAll(".semester-card");
-        const startBtn = document.getElementById("start-btn");
         const infoLabel = document.getElementById("info-label");
-        const changeBtn = document.getElementById("change-btn");
+        const kategoriSelect = document.getElementById("kategori-select");
 
-        let selectedKategori = null;
+        // "" = mode general
+        let selectedKategori = "";
 
         const labelMap = {
             "wajib_1": "Wajib Semester 1",
@@ -520,67 +326,54 @@
             "pilihan_genap": "Mata Kuliah Pilihan Genap"
         };
 
-        function updateSelectedInfo() {
+        infoLabel.textContent = "Mode: General (semua semester)";
+
+        // perubahan dropdown
+        kategoriSelect.addEventListener("change", () => {
+            selectedKategori = kategoriSelect.value;
+
             if (!selectedKategori) {
-                selectedInfo.textContent = "Belum ada semester/mata kuliah yang dipilih.";
-                startBtn.disabled = true;
-                return;
+                infoLabel.textContent = "Mode: General (semua semester)";
+            } else {
+                infoLabel.textContent = "Kategori: " + (labelMap[selectedKategori] || selectedKategori);
             }
-
-            selectedInfo.textContent = "Kategori terpilih: " + (labelMap[selectedKategori] || selectedKategori);
-            startBtn.disabled = false;
-        }
-
-        semesterCards.forEach(card => {
-            card.addEventListener("click", () => {
-                selectedKategori = card.dataset.kategori;
-
-                semesterCards.forEach(c => c.classList.remove("active"));
-                card.classList.add("active");
-
-                updateSelectedInfo();
-            });
         });
 
-        startBtn.addEventListener("click", () => {
-            if (!selectedKategori) return;
-
-            infoLabel.textContent = "Kategori: " + (labelMap[selectedKategori] || selectedKategori);
-
-            landing.style.display = "none";
-            appPage.style.display = "flex";
-
-            setTimeout(() => {
-                queryInput.focus();
-            }, 50);
-        });
-
-        changeBtn.addEventListener("click", () => {
-            appPage.style.display = "none";
-            landing.style.display = "flex";
-        });
-
+        // Fungsi untuk menambah pesan ke chat (sekarang pakai row + avatar untuk bot)
         function addMessage(text, isUser) {
-            const div = document.createElement("div");
-            div.className = "msg " + (isUser ? "user-msg" : "bot-msg");
+            const row = document.createElement("div");
+            row.className = "msg-row " + (isUser ? "user-row" : "bot-row");
+
+            const bubble = document.createElement("div");
+            bubble.className = "msg " + (isUser ? "user-msg" : "bot-msg");
 
             if (isUser) {
-                div.textContent = text;
+                bubble.textContent = text;
+                row.appendChild(bubble);
             } else {
-                div.innerHTML = text;
+                // avatar bot
+                const avatar = document.createElement("img");
+                avatar.className = "bot-avatar";
+                avatar.src = "/static/isc.jpg"; 
+                avatar.alt = "Bot";
 
-                // Render LaTeX menggunakan KaTeX
+                bubble.innerHTML = text;
+
+                row.appendChild(avatar);
+                row.appendChild(bubble);
+
+                // Render LaTeX dengan KaTeX
                 if (window.renderMathInElement) {
-                    renderMathInElement(div, {
+                    renderMathInElement(bubble, {
                         delimiters: [
-                            {left: "$$", right: "$$", display: true},
-                            {left: "$", right: "$", display: false}
+                            { left: "$$", right: "$$", display: true },
+                            { left: "$",  right: "$",  display: false }
                         ]
                     });
                 }
             }
 
-            chatBox.appendChild(div);
+            chatBox.appendChild(row);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
@@ -588,28 +381,28 @@
             const query = queryInput.value.trim();
             if (!query) return;
 
-            if (!selectedKategori) {
-                addMessage("Silakan pilih dulu semester atau mata kuliah di landing page sebelum bertanya.", false);
-                return;
-            }
-
             addMessage(query, true);
             queryInput.value = "";
-
+            
             try {
+                const payload = { query: query };
+                // kalau user pilih kategori -> kirim; kalau tidak -> mode general
+                if (selectedKategori) {
+                    payload.kategori = selectedKategori;
+                }
+
                 const res = await fetch("/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        query: query,
-                        kategori: selectedKategori
-                    })
+                    body: JSON.stringify(payload)
                 });
 
-                // kalau belum login, backend balas 401
                 if (res.status === 401) {
                     const data401 = await res.json();
-                    addMessage(data401.error || "Silakan login terlebih dahulu sebelum mulai chat.", false);
+                    addMessage(
+                        data401.error || "Silakan login terlebih dahulu sebelum mulai chat.",
+                        false
+                    );
                     return;
                 }
 
@@ -619,30 +412,29 @@
                 } else {
                     addMessage("Error: " + (data.error || "Terjadi kesalahan di server."), false);
                 }
-
             } catch (err) {
                 addMessage("Network error: " + err.message, false);
             }
         }
 
+        // Enter untuk kirim
         queryInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter") sendQuery();
         });
 
         document.getElementById("send-btn").addEventListener("click", sendQuery);
 
-        // Optional: render math yang sudah ada di halaman saat pertama kali load
+        // Render math yang mungkin sudah ada saat halaman pertama kali load
         document.addEventListener("DOMContentLoaded", () => {
             if (window.renderMathInElement) {
                 renderMathInElement(document.body, {
                     delimiters: [
-                        {left: "$$", right: "$$", display: true},
-                        {left: "$", right: "$", display: false}
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$",  right: "$",  display: false }
                     ]
                 });
             }
         });
     </script>
-
 </body>
 </html>
