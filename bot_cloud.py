@@ -13,12 +13,12 @@ from flask_cors import CORS
 # =========================
 
 # TODO: sebaiknya pakai environment variable, jangan hardcode API key di production
-GEMINI_API_KEY = ""
+GEMINI_API_KEY = "key"
 GEMINI_MODEL = "gemini-2.5-flash"
 
 # Konfigurasi database
 db = mysql.connector.connect(
-    
+    "config db nya"
 )
 
 # Init Gemini
@@ -43,7 +43,11 @@ SEMESTER_TABLES = {
     # matkul pilihan
     "pilihan_ganjil": ["pilgan", "documents"],
     "pilihan_genap": ["pilgen", "documents"],
+
+    # MODE GENERAL: semua semester + pilihan + dokumen umum
+    "general": ["smt1", "smt2", "smt3", "smt4", "smt5", "smt6", "pilgan", "pilgen", "documents"],
 }
+
 
 
 def get_semester_label(selected_key: str) -> str:
@@ -57,7 +61,9 @@ def get_semester_label(selected_key: str) -> str:
         "wajib_6": "Semester 6",
         "pilihan_ganjil": "Mata Kuliah Pilihan Ganjil",
         "pilihan_genap": "Mata Kuliah Pilihan Genap",
+        "general": "mode general (semua semester)",
     }
+
     return mapping.get(selected_key, "semester yang dipilih")
 
 
@@ -339,12 +345,11 @@ def login():
             session["user_email"] = user["email"]
             session["username"] = user["username"]
             flash("Berhasil login.", "success")
-            return redirect(url_for("index"))  # ke halaman landing/chatbot
+            return redirect(url_for("index"))  
         else:
             flash("Email atau password salah.", "error")
             return render_template("login.html")
 
-    # GET
     return render_template("login.html")
 
 
@@ -356,12 +361,11 @@ def register():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "").strip()
 
-        # Validasi sederhana
+        # Validasi
         if not email or not phone or not username or not password:
             flash("Semua field wajib diisi.", "error")
             return render_template("register.html")
 
-        # Cek email sudah dipakai atau belum
         cursor = db.cursor(dictionary=True)
         cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
         existing = cursor.fetchone()
@@ -371,7 +375,6 @@ def register():
             flash("Email sudah terdaftar, silakan gunakan email lain atau login.", "error")
             return render_template("register.html")
 
-        # Simpan user baru (password disimpan apa adanya, TANPA hash)
         cursor.execute(
             "INSERT INTO users (email, phone, username, password) VALUES (%s, %s, %s, %s)",
             (email, phone, username, password)
@@ -392,10 +395,10 @@ def logout():
     flash("Berhasil logout.", "success")
     return redirect(url_for("index"))
 
-# ========== ROUTE API CHAT ==========
+
+@app.route("/chat", methods=["POST"])
 @app.route("/chat", methods=["POST"])
 def chat():
-    # Cek apakah sudah login
     if "user_id" not in session:
         return jsonify({"error": "Silakan login terlebih dahulu."}), 401
 
@@ -406,15 +409,16 @@ def chat():
 
         query_text = data["query"]
 
-        # baca pilihan semester/jenis matkul dari frontend
-        # nilai yang valid: 'wajib_1'..'wajib_6', 'pilihan_ganjil', 'pilihan_genap'
+        
         selected_key = data.get("kategori")
+        if not selected_key:
+            selected_key = "general"
+
         if selected_key not in SEMESTER_TABLES:
             return jsonify({"error": "Kategori semester/matkul tidak valid."}), 400
 
         tables = SEMESTER_TABLES[selected_key]
 
-        # Build query yang paham konteks (follow-up / bukan)
         user_query, rag_query = build_effective_query(query_text)
 
         # Jawaban dari Gemini + RAG
@@ -427,7 +431,6 @@ def chat():
             selected_key=selected_key
         )
 
-        # Convert markdown ke HTML
         html_answer = markdown(answer)
 
         return jsonify({"response": html_answer})
@@ -435,7 +438,5 @@ def chat():
         print("Error di /chat:", e)
         return jsonify({"error": str(e)}), 500
 
-
 if __name__ == "__main__":
-    # debug=True untuk development saja
     app.run(host="127.0.0.1", port=5000, debug=True)
